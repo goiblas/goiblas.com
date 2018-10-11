@@ -1,0 +1,125 @@
+/* Base
+*****************************************************/
+:root {
+    --c-main: #00C5A3;
+}
+img {
+    vertical-align: middle;
+}
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Asap', sans-serif;
+}
+
+::selection {
+    background-color:var(--c-main);
+    color: #fff
+}
+
+::-moz-selection {
+    background-color: var(--c-main);
+    color: #fff
+}
+
+/* Typography 
+*****************************************************/
+
+body {
+    background-color: #101010;
+    background-image: linear-gradient(to right, #161A1F 38.2%, #121519 38.2%);
+    color: #fff;
+    min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 2vh 0 10vh;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.65;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Layout 
+*****************************************************/
+.ly-grid {
+    --grid-padding: calc((38.2% - 73px) / 2);
+    display: grid;
+    width: 100%;
+    grid-template-columns: var(--grid-padding) [content-start] 73px calc((38.2% - 73px) / 2) [title-start] 1fr [content-end] calc((38.2% - 73px) / 2);
+}
+.ly-grid > * {
+    grid-column: var(--start, content-start) / var(--end, content-end); 
+}
+
+/* Header 
+*****************************************************/
+.Header {
+    align-items: center;
+    padding: 10vh 0;
+}
+    .Header__image {
+        --end: 1 span;
+        border-bottom: 4px solid var(--c-main);
+    }
+    .Header__title {
+        --start: title-start;
+    }
+        .Header__title h1 {
+            font-size: 17px;
+        }
+        .Header__title h2 {
+            color: var(--c-main);
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+/* Content 
+*****************************************************/
+.Quote {
+    display: flex;
+}
+.Quote__icon {
+    flex-basis: 32px;
+    flex-shrink: 0;
+    fill: var(--c-main);
+    margin-right: 25px;
+}
+.Quote__text p {
+    margin-bottom: 1.64em;
+}
+
+.SocialNav a {
+    color: var(--c-main);
+    font-size: 12px;
+    margin-right: 1.4em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+@media (min-width: 780px) {
+    .ly-grid {
+        max-width: 640px;
+        margin: 0 auto;
+        grid-template-columns: 
+           [content-start] 110px 30px [title-start] 1fr [content-end];
+    }
+    body {
+        font-size: 16px;
+        padding-bottom: 16vh;
+    }
+    .SocialNav a {
+        font-size: 13px;
+    }
+    .Header__title h1 {
+        font-size: 19px;
+    }
+    .Header__title h2 {
+        font-size: 17.5px;
+    }
+}
