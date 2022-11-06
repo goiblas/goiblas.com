@@ -1,0 +1,80 @@
+---
+title: "Evitar utilizar CSS media queries"
+date: "2021-02-06"
+---
+Puede parece un título un poco clickbait, pero no, es literalmente lo que quiero transmitir con este artículo. Ahora simplemente intentaré argumentar el porqué de esta afirmación
+
+Vamos con un ejemplo, tenemos que construir un layout de 2 columnas, con un número de filas indeterminado, con la excepción que el primer elemento van a ocupar la fila completa. En móvil todos los elementos se mostraran en una única columna.
+
+<Codepen hash="zYoqqKG" user="goiblas" title="Columns with media queries" />
+
+Hoy en día conseguir este comportamiento es muy sencillo gracias a Grid Layout y podemos utilizar una media query para definir el punto donde queremos que cambie nuestra estructura.
+
+Nuestro layout funciona perfectamente, pero… nos piden integrarlo en una página que tiene un menú lateral, este menú se oculta en pantallas pequeñas, pero hace que nuestras columnas se vean demasiado estrechas en tamaño de pantalla de 1100px, con lo que tenemos que hacer que los elementos se muestren en una columna en ese tamaño y cuando el menú lateral está oculto y hay tamaño suficiente volver a mostrar las 2 columnas, algo tal que así:
+
+```css
+.grid {
+  display: grid;
+  gap: 20px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+@media(min-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .grid :first-child {
+    grid-column-end: span 2;
+  }
+}
+
+@media(min-width: 780px) and (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .grid :first-child {
+    grid-column-end: span 2;
+  }
+}
+```
+
+Como vemos la cosa, algo que parecía sencillo se complica bastante y hace nuestro componentes difícil de reutilizar en otros contextos.
+
+Vale, veo el problema pero… como puedo crear estructuras responsive sin utilizar media queries. CSS ya trae herramientas para conseguirlo pero lo primero que necesitamos es cambiar el enfoque, es decir, en vez de pensar la distribución será en dos columnas a partir de 780px, lo cambiamos por las columnas pueden reducirse hasta 280px.
+
+
+```css
+.grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+   gap: 20px;
+   width: 90%;
+   margin: 0 auto;
+   max-width: 680px;
+}
+```
+
+Ahora tenemos que hacer que nuestro primer elemento, ocupe todo el espacio de la columna, para ello, no podemos utilizar grid-template-end: span 2; ya que forzará a nuestro grid a pintar 2 columnas, aunque no sea necesario. Lo que le tenemos que indicar es que siempre termine en la última columna, es decir, grid-template-end: -1; al utilizar un número negativo empezará a contar las columnas por el final, por lo tanto siempre será la última sin importar el número de columnas.
+
+
+<Codepen hash="GRNZNyx" user="goiblas" title="Columns without media query" />
+
+Nuestro layout ya se adapta perfectamente, sin importar la situación en la que se encuentre. Pero aun podemos pulir un detalle, si el tamaño de contenedor es lo suficientemente grande pueden aparecer 3 columnas o incluso más, ya que nosotros solo hemos definido el tamaño mínimo.
+
+Para corregir este comportamiento, le podemos decir que el tamaño mínimo de la columna será 240px o el 50% del contenedor lo que sea más pequeño. Este se puede conseguir utilizando la función min(240px, 50%);
+Tenemos que recordar quitar el gap, (exactamente el gap divido entre 2) del grid en ese 50%, quedando tal que así: min(240px, calc(50% - 10px)); y ahora todo junto.
+
+```css
+    grid-template-columns: repeat(auto-fit, minmax(max(240px, calc(50% - 10px )), 1fr));
+```
+
+<Codepen hash="GRNgYOV" user="goiblas" title="Grid columns repeat max 50%" />
+
+## Conclusión
+
+Por supuesto, no propongo eliminar todas las media queries de nuestras hojas de estilos, admito que puede aumentar la complejidad y que en algunos casos es innecesario este cambio de estrategia.
+
+No utilizar media queries favorece la adaptabilidad de nuestros componentes en cualquier situación, esto podía parecer imposible hace unos años, pero hoy en día gracias a grid layout y las nuevas funciones de CSS, han puesto a nuestra disposición todas las herramientas necesarias para conseguirlo.
+
+Es una opinión personal basada en mi experiencia, si tienes una opinión diferente o te interesa el tema, puedes dejar un comentario o escribirme por twitter [@goiblas] (https://twitter.com/goiblas)

@@ -1,0 +1,22 @@
+---
+title: "¿Por qué deberías utilizar :focus-visible?"
+date: "2021-10-20"
+---
+
+¿Quieres eliminar el borde exterior que aparece el pulsar sobre tus enlaces? Déjame que te cuente par de cosillas antes de eliminar es comportamiento de los navegadores.
+
+Una de las principales características de la web es que pueden ser navegable desde el teclado, generalmente, presionando la tecla tabulador nos permite saltar entre elementos interactivos, y presionado enter activarlos. Esa línea exterior nos permite identificar el punto en que nos encontramos rápidamente.
+
+Podemos personalizar ese aspecto que da el navegador a los elementos con foco, utilizando la pseudo clase :focus
+
+```css
+a:focus {
+  outline: 5px solid green;
+}
+```
+
+Esta regla añadirá un borde exterior verde a nuestros enlaces cuando hacemos foco sobre ellos utilizando el teclado, sin embargo, este borde también aparecerá cuando interactuamos con ellos pulsando con el ratón.
+
+Modificar este comportamiento no era sencillo así que mucha gente octava por eliminar el borde en todos los casos. Lo cual, como hemos visto, ocasiona serios problemas de accesibilidad.
+
+

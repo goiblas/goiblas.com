@@ -1,0 +1,47 @@
+---
+title: "Descubre la forma más sencilla de alinear elementos dentro de un flexbox"
+date: "2019-07-19"
+---
+Desde la aparición de flexbox en CSS se ha vuelto una herramienta imprescindible a la hora de colocar elementos uno al lado de otro, ya que, por defecto los hijos de un display: flex se apilan en el lado izquierdo ocupando el mínimo espacio según su contenido.
+
+![Comportamiento por defecto de display: flex](/images/display-flex.png)
+
+Si queremos modificar el comportamiento de los hijos, haciendo que se distribuyan por todo el espacio disponible, por ejemplo, puedes utilizar las propiedad que vienen asociad a Flex llamadas justify-content si queremos modificar el comportamiento en el eje vertical puedes utilizar align-items
+
+También hay otras propiedades que podemos aplicar a los hijos y modificaran su comportamiento por defecto, puedes echarle un vistazo a todas la propiedades en este artículo de CSS Tricks
+
+Pero en CSS hay muchas maneras de conseguir el mismo resultado, y normalmente, la mejor opción suele ser la más simple. Pues te voy mostrar una forma super sencilla que utilizo para alinear elementos dentro de un contenedor con display: flex y es utilizando márgenes automáticos
+
+## Display: flex + Margin: auto
+
+Si aplicamos un margen automático a un elemento dentro de un flex este lo empujará en sentido contrario, como muestra la siguiente imagen
+
+![Comportamiento de una elemento con margin-left: auto dentro de un display:flex](/images/flex-margin-left-auto-1.png)
+
+Pero esto no solo funciona en el eje X también lo podemos utilizar para alinear en el eje Y
+
+![Comportamiento de un elemento con margin left y top auto dentro de un display:flex](images/flex-margin-left-y-top-auto-1.png)
+
+Y si has llegado hasta aquí, seguro que ya no te sorprenderá cuando veas que para centrar en todos los ejes solo necesitas un contenedor con display flex y margin auto para el hijo, recuerda que para que esto funcione el elemento padre tiene que tener altura
+
+![Elemento centrado vertical y horizontalmente](images/flex-margin-auto-1.png)
+
+## Margin: auto dentro de un grid
+
+Este comportamiento también también sucede dentro de un display: grid con la diferencia que los hijos tienen un espacio delimitado, en la siguiente imagen puedes ver el resultado
+
+![Comportamiento de un elemento con margin-left: auto dentro de un display: grid](images/grid-margin-1.png)
+
+## Ejemplo
+
+Estas cosas como mejor se aprenden es trasteando, aquí te dejo un ejemplo codepen implentando esta estrategía, espero te resulte útil 🙂
+
+<Codepen
+    hash="MNwLJr"
+    title="Flexbox  ❤️ margin: auto"
+/>
+
+## Referencias
+
+- [https://www.w3.org/TR/css-flexbox-1/#auto-margins](https://www.w3.org/TR/css-flexbox-1/#auto-margins)
+La documentación del w3c donde explican este comportamiento
