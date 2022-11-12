@@ -1,6 +1,6 @@
 ---
 title: "¿Por qué deberías utilizar :focus-visible?"
-date: "2021-10-20"
+date: "2020-10-20"
 ---
 
 ¿Quieres eliminar el borde exterior que aparece el pulsar sobre tus enlaces? Déjame que te cuente par de cosillas antes de eliminar es comportamiento de los navegadores.
@@ -17,6 +17,23 @@ a:focus {
 
 Esta regla añadirá un borde exterior verde a nuestros enlaces cuando hacemos foco sobre ellos utilizando el teclado, sin embargo, este borde también aparecerá cuando interactuamos con ellos pulsando con el ratón.
 
-Modificar este comportamiento no era sencillo así que mucha gente octava por eliminar el borde en todos los casos. Lo cual, como hemos visto, ocasiona serios problemas de accesibilidad.
+Modificar este comportamiento no era sencillo así que mucha gente octava por eliminar el borde en todos los casos. Lo cual, como hemos visto, ocasiona **serios problemas de accesibilidad.**
 
+## :focus-visible
 
+Afortunadamente, desde Chrome 86 tenemos disponible focus-visible esta pseudo clase solo se activará cuando el navegador considere necesario mostrar el foco, por ejemplo cuando el usuario esté navegando utilizando el teclado.
+
+Pero cuidado, todavía hay navegadores que no la soportan, si necesitas la máxima compatibilidad posible, te recomiendo que eches un vistazo a [https://github.com/WICG/focus-visible](https://github.com/WICG/focus-visible)
+
+<Gist src="https://gist.github.com/goiblas/65ae5cf7b9c510171706add6885c49d7.js" />
+
+Puedes ver el comportamiento de :focus-visible en este codepen
+
+<Codepen hash="YzWWaEb" title=":focus-visible" />
+
+## Referencias
+
+- Importancia de la navegación por teclado: [https://www.a11yproject.com/posts/2013-01-11-navigate-using-just-your-keyboard/](https://www.a11yproject.com/posts/2013-01-11-navigate-using-just-your-keyboard/)
+- Compatibilidad: [https://caniuse.com/css-focus-visible](https://caniuse.com/css-focus-visible)
+- W3C CSS Selectors Level 4: [https://drafts.csswg.org/selectors-4/#the-focus-visible-pseudo](https://drafts.csswg.org/selectors-4/#the-focus-visible-pseudo)
+- Polyfill: [https://github.com/WICG/focus-visible](https://github.com/WICG/focus-visible)

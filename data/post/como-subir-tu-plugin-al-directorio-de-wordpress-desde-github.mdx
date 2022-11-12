@@ -1,0 +1,64 @@
+---
+title: "Como subir tu plugin al directorio de WordPress desde Github"
+date: "2020-05-10"
+---
+Hoy en día estándar de facto para el control de versiones es Git, los desarrolladores nos sentimos cómodos utilizándolo y han surgido un montón de herramientas alrededor de Git, como puede ser Github.
+
+Pero Git no es único sistema de control de también tenemos, por ejemplo, subversion, también conocido por su abreviatura SVN, que es el que WordPress para publicar y actualizar plugins en su directorio oficial.
+
+Subversion no está pensado para ir haciendo pequeños cambios, o guardar nuestro entorno de desarrollo, con lo que, personalmente prefiero utilizar Git.
+
+Existen varias opciones para conectar nuestro Github con el repositorio oficial, pero desde mi experiencia, la mejor es utilizando Github actions
+
+## Github actions
+
+Para utilizar una Github action lo primero que tenemos que hacer es crear un workflow en nuestro repositorio, para ello, creamos una carpeta **.github** y dentro una llamada **workflows**, aquí es donde añadiremos nuestra action, el nombre no es importante pero viene bien para diferenciarlas ya que podemos tener varias actions, por ejemplo la llamaremos deploy.yml.
+
+Las actions se escriben en formato yaml, y es donde definimos, cuándo se va ha ejecutar y qué tiene que ejecutar. En este caso vamos a utilizar una actions llamada [WordPress Plugin Deploy](https://github.com/marketplace/actions/wordpress-plugin-deploy)
+
+<Gist src="https://gist.github.com/goiblas/0a4831e428c42dd1d3627114d2a99a0a.js" />
+
+En el fichero especificamos que cuando hacemos un push de una nueva tag, ejecute la action de checkout a master y después la action de publicar en el directorio de WordPress, como bien indica en la documentación de la action, necesitamos pasarle el slug de nuestro plugin y el usuario y contraseña de WordPress.org
+
+El usuario y contraseña lo añadimos desde los **settings > secrets** de nuestro repositorio, siempre es mejor trabajar con las contraseñas ocultas en nuestros repositorios
+
+## Publicar los assets
+
+También necesitamos publicar los screenshots, el banner y el logo de nuestro plugin, para ello creamos una carpeta llamada **.wordpress-org** y metemos dentro nuestro assets, el formato y nombre de los archivos, tienen que seguir las indicaciones de WordPress.org [https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/](https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/)
+
+## ⚠️ Publicar solo los archivos imprescindibles de tu plugin
+
+WordPress nos avisa en la documentación oficial que no subamos al repositorio oficial archivos que no son imprescindibles para el funcionamiento del plugin, como por ejemplo el archivo **.gitignore**.
+
+Para ello creamos un archivo llamado **.distignore** donde incluiremos los archivos y directorio que no queremos enviar al directorio oficial.
+
+<Gist src="https://gist.github.com/goiblas/e8035d35b3471d5e8b6bf2390b2c5d31.js" />
+
+## Publicar nuestro plugin
+
+Ya tenemos todos los ingredientes preparados, ahora, cuando creemos un nuevo tag en nuestro repositorio Git, lazará la Github action y se publicará nuestro plugin.
+
+Para ello hacemos un commit de los cambios, creamos una nueva tag, por ejemplo **git tag v1.0** y publicamos los cambios **git push -tags** para publicar nuestro tag
+
+Podemos seguir el proceso desde la solapa Actions, donde nos informará se produce algún error o todo funciona correctamente
+
+![Deploy con github actions en el repositorio de WordPress](/images/deploy-to-WordPress-with-Github-Actions.png)
+
+## Resumen
+
+1. Añadir la action en .github/workflows
+2. Añadir los assets en .wordpress-org
+3. Crear el usuario y contraseña en settings/secrets
+4. Crear el fichero .distignore
+5. Creamos una nueva Tag en el repositorio
+
+## Enlaces de interés
+
+- Charla de Bernhard Kau (en inglés) [https://wordpress.tv/2019/11/11/bernhard-kau-automated-deployments-for-plugins-with-github-actions/](https://wordpress.tv/2019/11/11/bernhard-kau-automated-deployments-for-plugins-with-github-actions/)
+- Documentación de WordPress [https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/](https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/)
+- Action para publicar en el directorio de WordPress [https://github.com/marketplace/actions/wordpress-plugin-deploy](https://github.com/marketplace/actions/wordpress-plugin-deploy)
+- Ejemplo de plugin que lo implementa [https://github.com/goiblas/Map-Block-Leaflet](https://github.com/goiblas/Map-Block-Leaflet)
+
+
+
+

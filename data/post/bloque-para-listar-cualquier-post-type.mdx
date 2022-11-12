@@ -1,0 +1,69 @@
+---
+title: "Bloque para listar cualquier Post Type"
+date: "2020-04-04"
+---
+
+Estaba el otro día escuchando el podcast de los amigos de [freelandev](https://www.freelandev.com/) y comentaban, la necesidad que tenían en varios proyectos de mostrar un listado de un custom post type, como son unos cracks con PHP, ellos utilizan **shortcodes**, una forma perfectamente válida y que el editor de bloques da soporte.
+
+Pero nosotros vamos a ir un paso más allá **creando un bloque**, que nos imprima un listado con los artículos del tipo de post que elijamos, esto mejorar al experiencia respecto al shortcode ya que el usuario puede ver el resultado desde el editor y no tiene que recordar el shortcode
+
+No voy a explicar como preparar el entorno de desarrollo, pero si te interesa este tema, te recomiendo que eches un vistazo al post donde creaba un [bloque para restringir el acceso a un contenido](/blog/como-crear-un-bloque-de-restriccion-de-contenido-para-wordpress/)
+
+## Registramos el bloque en PHP
+
+Lo primero es registrar nuestro bloque, para ello utilizamos la función register_block_type, a la cual le vamos a pasar como atributos el listado de post types disponibles y el tipo de post que aparecerá seleccionado por defecto.
+
+Para obtener el listado de post types podemos utilizar la función get_post_types a la que le pasamos, como opciones que solo queremos los públicos y como segundo parámetro le decimos que solo queremos sus nombres. De esta forma obtenemos un array de clave valor con todos los tipos de post que tenemos en nuestro WordPress, **incluso los custom post types**.
+
+Para transformar ese array de clave valor de PHP en un array de Javascript utilizamos la función array_keys.
+
+<Gist src="https://gist.github.com/goiblas/6c051fc0f18b51075aff304c5cf87b8b.js" />
+
+## Código JavaScript del bloque
+
+Ahora vamos al código JavaScript de nuestro bloque, como ya hemos declarado nuestros atributos desde el PHP **no es necesario que volvamos a declararlos**, así que vamos directos a nuestra función edit.
+
+Solo necesitamos dos componentes, un select, que nos permita cambiar el tipo de post seleccionado y un componente que se encargue de pintar los artículos.
+
+Para el select, el editor de bloques nos facilita un componente llamado SelectControl al cual le pasamos como value el seleccionado y cómo options los tipos de post, aunque tenemos que transformar ese array para que se adapte al formato que entiende el componente, para ello, utilizamos la función map para transformar cada string del array en un objeto con las claves label y value.
+
+Por último definimos el método onChange el cual se ejecutará cuando el usuario cambie el valor del select y nos devolverá el nuevo tipo de post seleccionado.
+
+<Gist src="https://gist.github.com/goiblas/555c4b33f22b684ad9a775c8d2f555d4.js" />
+
+## Mostar listado de posts
+
+Ahora creamos el componente ArticlesList, encargado obtener el listado de artículos de la base de datos y pintarlos en el editor. Para hacer esta magia tenemos la funcion **getEntityRecords**, el problema, es que esta función es asíncrona ya que tiene que obtener esa información de la base de datos. Para facilitarnos la tarea de trabajar con este método y con otros de la función select, han creado **withSelect**, un **high order component** el cual envuelve nuestro componente  y nos simplifica el desarrollo. Solo nos tenemos que preocupar que recibiremos unos artículos y hasta entonces mostrar un cargando.
+
+Este high order component nos provee como primer parámetro de la función select que utilizaremos para obtener nuestros artículos y devolvemos un objeto con la clave articles
+
+<Gist src="https://gist.github.com/goiblas/6ac4e285bd9eead53dd3d65a736ed7e0.js" />
+
+la función select nos permite acceder al store, es un tema interesante y con bastante miga,  si te interesa el tema, déjalo en los comentarios.
+
+Para pintar los artículos utilizamos la misma estrategia que hemos utilizado antes para transformar nuestro array opciones para el componente.Utilizando map transformamos cada uno de  los elementos del array en código jsx que pintará un li con un link y el título del artículo
+
+<Gist src="https://gist.github.com/goiblas/ee4c2489bfccddda5e1acbbe35415a60.js" />
+
+## Props & High Order Component
+
+Perfecto! nuestro componente ya pinta los post, pero necesitamos pasarle qué tipo concreto de post type queremos pintar, para ello pasamos la nuestro componente la propiedad type con el post type seleccionado, ahora necesitamos acceder a ella dentro de withSelect.
+
+Para acceder a las propiedades que se le pasan a un componente dentro de una high order component, las recibimos como segundo parámetro, con lo que nuestra función se quedará tal que así.
+
+<Gist src="https://gist.github.com/goiblas/03a8664317958366b74202915e10c3f0.js" />
+
+<Gist src="https://gist.github.com/goiblas/138dbd256f7fd1282cc0905af4520648.js" />
+
+## Render callback
+
+Ahora tenemos que pintar nuestro bloque en el frontend de nuestro WordPress, para ello, no podemos simplemente guardar el listado como un atributo del bloque, ya que esa información es dinámica, podemos añadir o eliminar artículos y nuestro bloque no se enterará hasta que no entremos a editarlo, con lo que vamos a renderizarlo desde PHP.
+
+Para renderizar un bloque desde PHP, tenemos que añadir en el registro del bloque la clave “render_callback” a la que asociamos un función. Esta función recibirá como primer parámetro un array con los atributos del bloque, de hay sacamos el tipo de post type seleccionado, obtenemos la información a través de WP_Query y devolvemos el html que WordPress pintará en el frontend
+
+<Gist src="https://gist.github.com/goiblas/3dece79cc3c3683d3779d1896fa4a939.js" />
+
+Ya tenemos nuestro bloque funcionando, aunque se me ocurren muchas mejoras que podemos añadirle, como pasarle el número de artículos que queremos mostrar, darle estilos a nuestro listado o incluso poder elegir entre diferentes aspecto, ¿Qué opinas? Déjalo en los comentarios o coméntamelo por twitter
+
+Tienes todo el código disponible en: [github.com/goiblas/Block-List-Post-Type](https://github.com/goiblas/Block-List-Post-Type) y por supuesto se aceptan pull requests con mejoras.
+

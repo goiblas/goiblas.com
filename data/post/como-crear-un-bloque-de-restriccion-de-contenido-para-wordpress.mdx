@@ -1,0 +1,76 @@
+---
+title: "Cómo crear un bloque de restricción de contenido para WordPress"
+date: "2019-07-28"
+---
+En este artículo te voy a enseñar a crear tu propio bloque restricción de contenidos dependiendo del rol del visitante. Es un ejemplo con pocas lineas de código pero que abarca unos cuantos conceptos super útiles a la hora de desarrollar tus propios bloques y te abre un abanico de posibilidades muy interesante
+
+## Entorno de desarrollo
+
+Lo primero que necesitas es un entorno de desarrollo que te permita transpilar tu código escrito en JSX a JavaScript, para ello, la comunidad de WordPress a desarrollado un paquete en NPM que te facilitará mucho el trabajo.
+
+```bash
+npm install -g @wordpress/create-block
+```
+
+Si quieres más información sobre este tema te recomiendo que eches un vistazo al artículo de Nelio Software (Transpilando JavaScript fácilmente con wp-scripts)[https://neliosoftware.com/es/blog/transpilando-javascript-facilmente-con-wp-scripts/] y por supuesto la documentación oficial sobre (desarrollo de bloques)[https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/]
+
+## Registrar el bloque
+
+Lo primero que tienes que hacer es registrar el bloque, con los archivos necesarios para que función, para ello primero registra script a través de función wp_register_script recordando que el archivo transpilado se encontrará en la carpeta **build/index.js**, el siguiente parámetro que tienes que incluir son las dependencias que necesitas que estén cargadas para que funcione.
+
+Después registra el bloque a través de la función register_block_type pasando como primer parámetro el nombre del bloque y a continuación un array con sus parámetros, entre el cual está editor_script donde puedes pasarle el script que habías declarado previamente, **WordPress se encargará de cargarlo únicamente dentro del editor**
+
+<Gist src="https://gist.github.com/goiblas/d68ff8f26d5ce7db0730d27b446ebbd3.js" />
+
+### Definir parámetros desde PHP
+
+Incluso puedes pasarle los parámetros que vas a necesitar utilizar dentro tu bloque, para este bloque necesitarás el **listado de roles** y el listado de **roles que tienen permiso** para ver el contenido
+
+<Gist src="https://gist.github.com/goiblas/78d8272e2cb93dc2d9d843a2f4007731.js" />
+
+## Creación del bloque
+
+Ya tienes el entorno creado y los archivos se cargados, ahora solo necesitas abrir un consola en la carpeta de plugin y ejecutar npm run start Automáticamente el código que escribas dentro de **src/index.js** será transpilado en la carpeta **build/**
+
+### Estructura de un bloque
+
+Para crear un bloque tienes que utilizar la función registerBlockType que se encuentra dentro de wp.blocks, como primer parámetro espera el **nombre del bloque** y el segundo es un objeto con todos los **detalles del bloque**, destacar la función *edit* que será la responsable de lo que aparece dentro del editor y la función *save* que se ocupará de mostrar el contenido en el frontend
+
+<Gist src="https://gist.github.com/goiblas/4db4644a2a02990f1694e2589c08c398.js" />
+
+Un detalle interesante es que como ya has **definido tus atributos desde PHP** no es necesario que vuelvas a definirlos.
+
+
+## Características especificas
+
+Una forma muy cómoda de ver y modificar características especificas de un bloque es a través del componente **InspectorControls**, es el encargado de mostrar la información en la barra lateral cuando seleccionamos el bloque.
+
+Para poder seleccionar que roles van a poder acceder al contenido, puedes utilizar **SelectControl** desde wp.components lo único a tener en cuenta pasarle el parámetro multiple, y transformar los roles que recibirás como atributo para que se **adapten a lo que espera componente**, en este caso yo lo he realizado con un map
+
+### Añadir contenido al bloque
+
+Para poder añadir otros bloques dentro de un bloque, puedes utilizar el componente **InnerBlocks** el cual le puedes añadir propiedades que te pueden ser muy útiles, yo en este caso he utilizado template para añadir un contenido por defecto cuando se crear el bloque pero te dejo un enlace donde puedes ver otras funcionales [https://github.com/WordPress/gutenberg/tree/master/packages/block-editor/src/components/inner-blocks](https://github.com/WordPress/gutenberg/tree/master/packages/block-editor/src/components/inner-blocks)
+
+En el método save del bloque únicamente tienes que añadir el componente **InnerBlocks.Content** y el se ocupará de mostrar el contenido que han añadido en el método **edit**
+
+## Código del bloque
+
+<Gist src="https://gist.github.com/goiblas/0171ae1454269d1843884903b5bb1986.js" />
+
+### Aspecto del bloque en el editor
+
+![Bloque de contenido protegido](/images/Captura-de-pantalla-2019-08-22-a-las-14.09.04-1568x679.png)
+
+## Renderizado condicional
+
+Por ahora el bloque muestra el contenido a todos los roles, hay que procesar ese contenido antes de que le llegue al usuario, para ello, vuelve a tu archivo PHP y añade un atributo más la función de registro del bloque llamado render_callback al cual le puedes pasar el nombre de una función
+
+Esta función de render recibe dos parámetros el primero son los atributos y el segundo es el contenido. Con esta información solo necesitas acceder al usuario actual a través de la función wp_get_current_user() y comprobar que el rol del usuario está dentro de los roles permitidos.
+
+Si tiene permisos le mostrarás el contenido que se ha venido como segundo parámetro y si no puedes mostrarle un mensaje diciendo que no tiene permisos.
+
+## Código completo del plugin
+
+<Gist src="https://gist.github.com/goiblas/8ff907efc1dafadf4f434b463fa334f1.js" />
+
+Y ya estaría funcionando, espero te resulte útil, tienes todo el código disponible en [https://github.com/goiblas/Block-Restrict-Content](https://github.com/goiblas/Block-Restrict-Content)

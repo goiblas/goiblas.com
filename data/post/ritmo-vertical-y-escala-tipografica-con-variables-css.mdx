@@ -1,0 +1,43 @@
+---
+title: "Ritmo vertical y escala tipográfica con Variables CSS"
+date: "2019-08-15"
+---
+No recuerdo donde fue la primera vez que leí sobre escala tipográfica, pero desde que lo conocí es por lo primero que hago al una guía de estilos para un proyecto, consiste en multiplicar un tamaño base del texto por un factor de crecimiento para obtener el tamaño de los encabezados.
+
+Te recomiendo un par de herramientas [type-scale.com](https://type-scale.com) y [modularscale.com](https://www.modularscale.com/)
+
+## Escala tipográfica con variables CSS
+
+Vamos a implementar esta técnica utilizando variables CSS, necesitamos un tamaño base, un factor de crecimiento y el numero de veces que se va ha incrementar, por defecto ninguna.
+
+Utilizamos la función calc para obtener el tamaño de nuestro texto, échale un ojo al código.
+
+<Gist src="https://gist.github.com/goiblas/edbcbc7d552ece4d9cb1db595e92548b.js" />
+
+## Ritmo vertical con variables CSS
+
+Ahora vamos a añadir ritmo a nuestro texto, utilizamos el alto de linea como unidad para generar los espacios en blanco y el alto de linea del resto de elementos. Así conseguimos una armonía en nuestro diseño.
+
+Puede que te interese este recurso [www.gridlover.net](https://www.gridlover.net)
+
+Ahora vamos a añadir ritmo vertical a nuestro ejemplo anterior, y lo podemos utilizar tanto para el alto de linea, márgenes y rellenos siempre combinándolo con nuestra gran aliada la función calc.
+
+<Gist src="https://gist.github.com/goiblas/0e99f3ee7482091c0eb780d6a1747b9d.js" />
+
+## Factor de crecimiento en pantallas pequeñas
+
+Nuestra CSS tiene un problema los encabezados principales son demasiado grandes para verlos en dispositivos móviles, para solucionarlo simplemente tenemos que reducir el factor de crecimiento así no alcanzarán tamaño tan grandes.
+
+<Gist src="https://gist.github.com/goiblas/df468a69a9c6cf876d0ae2b1553764be.js" />
+
+Con este ejemplo ya puedes ver la potencia que tienen las variables nativas de CSS y la diferencia que tienen con las variables de Sass.
+
+Como solo necesitamos cambiar el valor de las variables para modificar el comportamiento de nuestros textos. Vamos al siguiente nivel «calc inception».
+
+En tamaño intermedios de pantalla nos puede ser muy útil multiplicar el tamaño del texto por una unidad relativa a la pantalla como por ejemplo viewport width (vw)
+
+Para ello asignamos como valor a nuestras variables una función calc con el tamaño de texto multiplicado por la unidad relativa.
+
+## Resultado Final
+
+<Codepen hash="rNBeegg" title="Build Scale & Rhythm with variables CSS" />

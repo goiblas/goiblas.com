@@ -6,59 +6,26 @@ Puede parece un título un poco clickbait, pero no, es literalmente lo que quier
 
 Vamos con un ejemplo, tenemos que construir un layout de 2 columnas, con un número de filas indeterminado, con la excepción que el primer elemento van a ocupar la fila completa. En móvil todos los elementos se mostraran en una única columna.
 
-<Codepen hash="zYoqqKG" user="goiblas" title="Columns with media queries" />
+<Codepen
+    hash="zYoqqKG"
+    title="Columns with media queries"
+/>
 
 Hoy en día conseguir este comportamiento es muy sencillo gracias a Grid Layout y podemos utilizar una media query para definir el punto donde queremos que cambie nuestra estructura.
 
 Nuestro layout funciona perfectamente, pero… nos piden integrarlo en una página que tiene un menú lateral, este menú se oculta en pantallas pequeñas, pero hace que nuestras columnas se vean demasiado estrechas en tamaño de pantalla de 1100px, con lo que tenemos que hacer que los elementos se muestren en una columna en ese tamaño y cuando el menú lateral está oculto y hay tamaño suficiente volver a mostrar las 2 columnas, algo tal que así:
 
-```css
-.grid {
-  display: grid;
-  gap: 20px;
-  width: 90%;
-  margin: 0 auto;
-}
-
-@media(min-width: 1100px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .grid :first-child {
-    grid-column-end: span 2;
-  }
-}
-
-@media(min-width: 780px) and (max-width: 800px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .grid :first-child {
-    grid-column-end: span 2;
-  }
-}
-```
+<Gist src="https://gist.github.com/goiblas/95cf1b99ed42e0310b48be54f1a23447.js" />
 
 Como vemos la cosa, algo que parecía sencillo se complica bastante y hace nuestro componentes difícil de reutilizar en otros contextos.
 
 Vale, veo el problema pero… como puedo crear estructuras responsive sin utilizar media queries. CSS ya trae herramientas para conseguirlo pero lo primero que necesitamos es cambiar el enfoque, es decir, en vez de pensar la distribución será en dos columnas a partir de 780px, lo cambiamos por las columnas pueden reducirse hasta 280px.
 
-
-```css
-.grid {
-   display: grid;
-   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-   gap: 20px;
-   width: 90%;
-   margin: 0 auto;
-   max-width: 680px;
-}
-```
+<Gist src="https://gist.github.com/goiblas/4d011c9c18473a00a08c0475ca74d7c6.js" />
 
 Ahora tenemos que hacer que nuestro primer elemento, ocupe todo el espacio de la columna, para ello, no podemos utilizar grid-template-end: span 2; ya que forzará a nuestro grid a pintar 2 columnas, aunque no sea necesario. Lo que le tenemos que indicar es que siempre termine en la última columna, es decir, grid-template-end: -1; al utilizar un número negativo empezará a contar las columnas por el final, por lo tanto siempre será la última sin importar el número de columnas.
 
-
-<Codepen hash="GRNZNyx" user="goiblas" title="Columns without media query" />
+<Codepen hash="GRNZNyx" title="Columns without media query" />
 
 Nuestro layout ya se adapta perfectamente, sin importar la situación en la que se encuentre. Pero aun podemos pulir un detalle, si el tamaño de contenedor es lo suficientemente grande pueden aparecer 3 columnas o incluso más, ya que nosotros solo hemos definido el tamaño mínimo.
 
@@ -77,4 +44,4 @@ Por supuesto, no propongo eliminar todas las media queries de nuestras hojas de 
 
 No utilizar media queries favorece la adaptabilidad de nuestros componentes en cualquier situación, esto podía parecer imposible hace unos años, pero hoy en día gracias a grid layout y las nuevas funciones de CSS, han puesto a nuestra disposición todas las herramientas necesarias para conseguirlo.
 
-Es una opinión personal basada en mi experiencia, si tienes una opinión diferente o te interesa el tema, puedes dejar un comentario o escribirme por twitter [@goiblas] (https://twitter.com/goiblas)
+Es una opinión personal basada en mi experiencia, si tienes una opinión diferente o te interesa el tema, puedes dejar un comentario o escribirme por twitter [@goiblas](https://twitter.com/goiblas)

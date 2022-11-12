@@ -10,21 +10,31 @@ const oldPosts = [
   "estrategias-de-maquetacion-responsive-con-variables-css",
   "como-subir-tu-plugin-al-directorio-de-wordpress-desde-github",
   "bloque-para-listar-cualquier-post-type",
-  "crea-tu-blog-utilizando-frontity-wordpress",
   "ritmo-vertical-y-escala-tipografica-con-variables-css",
-  "como-esta-creado-este-blog",
   "descubre-la-forma-mas-sencilla-de-alinear-elementos-dentro-de-un-flexbox"
-]
+].map((slug) => ({
+  source: `/${slug}`,
+  destination: `/blog/${slug}`,
+  permanent: true,
+}));
+
+const archivePosts = [
+  "crea-tu-blog-utilizando-frontity-wordpress",
+  "como-esta-creado-este-blog"
+].map((slug) => ({
+  source: `/${slug}`,
+  destination: `/`,
+  permanent: true,
+}))
 
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   async redirects() {
-    return oldPosts.map(slug => ({
-      source: `/${slug}`,
-      destination: `/blog/${slug}`,
-      permanent: true,
-    }));
+    return [
+      ...oldPosts,
+      ...archivePosts,
+    ]
   }
 }
 

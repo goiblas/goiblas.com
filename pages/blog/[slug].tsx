@@ -5,9 +5,11 @@ import styled from '@emotion/styled'
 import type { Post as PostProps } from "../../lib/blog";
 import { Codepen } from "../../components/Codepen";
 import { Link } from "../../components/Link";
+import { Gist } from "../../components/Gist";
 
 const components = {
   Codepen,
+  Gist,
   a: Link,
 }
 

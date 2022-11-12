@@ -1,0 +1,43 @@
+---
+title: "Estrategias de maquetación responsive con Variables CSS"
+date: "2020-5-17"
+---
+Hoy en día las variables de nativas de CSS están soportadas prácticamente por todos los navegadores. Creo que es un buen momento para exprimir las posibilidad que nos ofrecen
+
+En esta ocasión me quiero centrar en un par de estrategias, que en mi opinión, nos facilitan el trabajo de crear estructuras que se adapten a los diferentes dispositivos.
+
+## Tamaños de texto responsive
+
+Uno de los problemas más comunes que nos encontramos a la hora de realizar una maquetación responsive, es que el tamaño de los títulos en la versión de escritorio es mucho más grande que en la versión para pantallas pequeñas.
+
+Las variables de CSS pueden ser muy útiles para resolver este problema, ya que una de sus principales características es que podemos cambiar su valor cuando se encuentran dentro de un contexto, por ejemplo dentro de una media query.
+
+La estrategia es sencilla, se declaran todos los tamaños disponibles como variables en root, aplicamos las variables a nuestro elementos y para conseguir ampliar el tamaño, a medida que crece el tamaño de la pantalla, utilizando media queries sobreescribimos el valor de las variables de root.
+
+<Codepen hash="NWGLjXP" title="Responsive types" />
+
+## Definición de variables dentro de media queries
+
+En la estrategia anterior, toda la responsabilidad de que el tamaño de los textos se adapte al tamaño de pantalla, recae sobre la variables, simplificando el desarrollo pero limitando las opciones. Esto casa perfecto para trabajar con tamaños de texto, pero puede ser insuficiente, para aplicarlo al manejo de espaciados.
+
+En mi opinión, cada molécula o componente debería ser quien administre dónde, y qué, espaciado utilizar, aunque siempre dentro de un número limitado de opciones que se definen globalmente.
+
+Para conseguir una adaptación perfecta, nos obliga a crear varias media queries donde la mayor parte de las ocasiones únicamente necesitamos modificar el espaciado, esto puede solucionarse, combinando nuestro componentes, con clases de utilidad (ejemplo tipo Tailwind), aunque en alguna ocasiones puede ser excesivo generar todas la clases necesarias.
+
+Para estos casos podemos aprovecharnos de los fallback de la función de css var(). Cómo hacer esto, a la función var() podemos pasarle un valor como segundo parámetro, este se utilizará cuando la variable no está definida, el cual a su vez puede ser otra función var().
+
+Definiendo variables que solo están disponibles en ciertos tamaños de pantalla, podemos conseguir comportamientos responsive, sin necesidad de redefinir el componente dentro de una media querie.
+
+<Codepen hash="BaoqvXV" title="Responsive & var() fallback" />
+
+## Space + fallback ❤️
+
+Más allá de mostrar el comportamiento, no resulta muy interesante utilizarlo con colores pero tiene todo el sentido utilizarlo para los espaciados (margin, padding, gap, …) vamos ver un ejemplo completo.
+
+<Codepen hash="QWjZYEP" title="Example responsive with variables CSS" />
+
+## ¿Qué te ha parecido?
+
+Siempre agradezco los comentarios, pero en esta ocasión más que nunca, estamos trabajando en una colección de hojas de estilos para agilizar el desarrollo y que aprovechen las posibilidades que nos ofrecen las variables nativas de CSS. Por eso, cualquier feedback es bien recibido tanto en comentarios como por twitter [@goiblas](https://twitter.com/goiblas)
+
+Seguiré compartiendo los avances y aunque todavía estamos en una fase muy temprana, a quien le apetezca colaborar que se ponga en contacto conmigo.
