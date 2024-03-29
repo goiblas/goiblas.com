@@ -1,0 +1,54 @@
+---
+title: "Cheatsheet comandos y tips desarrollo web"
+date: "2024-03-29"
+---
+
+Listado de comandos y tips que voy recopilando en mi día a día como desarrollador web, son comandos que siempre olvido y que me gustaría tener a la mano.
+
+## Matar el puerto 3000 en mac
+    
+```bash
+kill -9 $(lsof -ti:3000)
+```
+
+Para multiples puertos
+
+```bash
+kill -9 $(lsof -ti:3000,3001,3002)
+```
+
+### kill: not enough arguments
+
+Quizás e puerto que estas intento liberar ya está libre, puedes usar el siguiente comando para ver los puertos que están ocupados
+
+```bash
+lsof -i -P -n | grep LISTEN
+```
+
+## Error de typescript al utilizar variables css
+
+```jsx
+function Component() {
+  return <div style={{ "--var-name": 10 } as React.CSSProperties} />
+}
+```
+
+## Deshacer el último commit
+
+Manteniendo los cambios
+
+```bash
+git reset --soft HEAD~1
+```
+
+Eliminando los cambios
+
+```bash
+git reset --hard HEAD~1
+```
+
+Volver a un commit anterior, crea un nuevo commit con los cambios
+
+```bash
+git revert <commit-hash>
+```
