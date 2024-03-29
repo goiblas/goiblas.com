@@ -112,6 +112,6 @@ pre {
   overflow-x: auto;
   padding: 16px;
   border-radius: 4px;
-  background: var(--color-bg-paper);
   color: var(--color-contrast-medium);
+  background-color: var(--color-contrast-lower);
 }
