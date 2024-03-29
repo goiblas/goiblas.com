@@ -20,7 +20,7 @@ const Title = styled.div`
 
 const UrlLink = styled.a`
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.contrastNeutral};
+    color: ${({ theme }) => theme.colors.contrastMedium};
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -28,7 +28,7 @@ const UrlLink = styled.a`
 `
 
 const Description = styled.div`
-    color: ${({ theme }) => theme.colors.contrastNeutral};
+    color: ${({ theme }) => theme.colors.contrastMedium};
     margin-bottom: 16px;
 `
 
