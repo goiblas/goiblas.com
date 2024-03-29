@@ -14,10 +14,12 @@ const Title = styled.h1`
 
     strong {
         color: ${({theme}) => theme.colors.contrastHigh};
+    }
+    a, strong {
         font-weight: 550;
     }
     ${({theme}) => theme.breakpoints.sm} {
-        font-size: 28px;
+        font-size: 22px;
     }
 `
 
@@ -43,7 +45,7 @@ type HeroProps = {
 
 const Hero = ({ children, image, alt }: HeroProps) => {
     return (
-        <Box py={[8, 9, null, 10]}>
+        <Box py={[5, 6, null, 8]}>
             <Box pos="relative">
                 <ImageContainer>
                     <HeroImage src={image} width={76} height={76} alt={alt} />
