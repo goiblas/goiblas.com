@@ -2,7 +2,7 @@ import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { getPageBySlug, getAllSlugs  } from "../lib/page";
 import { Box } from "../components/Box";
 import styled from '@emotion/styled'
-import { ProyectCard } from "../components/ProyectCard";
+import { ProjectCard } from "../components/ProjectCard";
 import { Link } from "../components/Link";
 import type { Page as PageProps } from "../lib/page";
 import { Qoute } from "../components/Qoute";
@@ -23,7 +23,7 @@ export default function Post({ title, content, author, quote }: PageProps) {
       </Box>
       <MDXRemote {...content} components={{
         Codepen: ({ id }) => <iframe height="265" style={{width: '100%'}} scrolling="no" title="Codepen" src={`https://codepen.io/jesusolazagoitia/embed/${id}?height=265&theme-id=dark&default-tab=result`} frameBorder="no" loading="lazy" allowFullScreen={true} />,
-        ProyectCard,
+        ProjectCard,
         a: Link
       }} />
     </>
