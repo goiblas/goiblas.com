@@ -7,7 +7,20 @@ const root = process.cwd();
 
 export const getAllFiles = async (route: string) => fs.readdirSync(path.join(root, "data", route))
 
-const getExcerpt = (content: string) => content.slice(0, 260);
+const LIMIT_EXCERPT = 260
+
+const getExcerpt = (content: string) => {
+    const paragraphs = content.split("\n")
+    const firstParagraph = paragraphs.find((line) => line.length > 0)
+
+    if(!firstParagraph) return ""
+
+    if(firstParagraph.length <= LIMIT_EXCERPT) {
+        return firstParagraph.slice(0, firstParagraph.length - 1)
+    }
+
+    return firstParagraph.slice(0, LIMIT_EXCERPT)
+}
 
 export const getMetaDataFile = async (route: string, file: string) => {
     const { data, excerpt } = matter.read(path.join(root,"data", route, file), {
